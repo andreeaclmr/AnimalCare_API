@@ -1,5 +1,6 @@
 package com.example.AnimalCare_API.animal;
 
+import com.example.AnimalCare_API.family.Family;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -21,19 +22,27 @@ public class Animal {
     @Column(name = "country", nullable = false)
     private String countryOfOrigin;
 
+    @ManyToOne
+    @JoinColumn(name = "family")
+    private Family family;
+
     @Column(name = "date", nullable = false)
     private LocalDate dateOfEntry;
 
     @Column(name = "image", nullable = false)
     private String imageUrl;
 
-    public Animal(int id, String name, String gender, String countryOfOrigin, LocalDate dateOfEntry, String imageUrl) {
+
+
+    public Animal(int id, String name, Family family, String gender, String countryOfOrigin, LocalDate dateOfEntry, String imageUrl) {
         this.id = id;
         this.name = name;
+        this.family = family;
         this.gender = gender;
         this.countryOfOrigin = countryOfOrigin;
         this.dateOfEntry = dateOfEntry;
         this.imageUrl = imageUrl;
+
     }
 
     public int getId() {
@@ -83,6 +92,14 @@ public class Animal {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
     }
 
     public Animal() {

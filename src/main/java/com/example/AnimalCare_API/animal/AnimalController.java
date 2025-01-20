@@ -34,10 +34,15 @@ public class AnimalController {
     }
 
     @PostMapping
-    public Animal createAnimal (@RequestBody Animal animal) {
+    public ResponseEntity<?> createAnimal (@RequestBody Animal animal) {
+        Optional<Animal> optionalAnimal = animalRepository.findByName(animal.getName());
+
+        if (optionalAnimal.isPresent()) return new ResponseEntity<>("The name already exists", HttpStatus.BAD_REQUEST);
+
         Animal savedAnimal = animalRepository.save(animal);
-        return savedAnimal;
+        return new ResponseEntity<>(savedAnimal, HttpStatus.CREATED);
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteAnimalById(@PathVariable Long id) {
