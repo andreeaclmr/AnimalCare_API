@@ -9,11 +9,15 @@ import java.util.List;
 @RequestMapping ("/api/admin/animals")
 public class AnimalController {
 
-    private final static List<Animal> animalsDB = new ArrayList<>();
+    private final AnimalRepository animalRepository;
 
-    public AnimalController() {
-
-
-
+    public AnimalController(AnimalRepository animalRepository) {
+        this.animalRepository = animalRepository;
     }
+
+    @GetMapping
+    public List<Animal> getAllAnimals() {
+        return this.animalRepository.findAll();
+    }
+
 }
