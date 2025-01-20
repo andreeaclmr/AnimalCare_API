@@ -84,4 +84,8 @@ public class Animal {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public Animal() {
+
+    }
 }

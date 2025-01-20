@@ -18,7 +18,7 @@ public class AnimalController {
         this.animalRepository = animalRepository;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Animal> getAllAnimals() {
         return this.animalRepository.findAll();
     }
@@ -37,7 +37,12 @@ public class AnimalController {
     public Animal createAnimal (@RequestBody Animal animal) {
         Animal savedAnimal = animalRepository.save(animal);
         return savedAnimal;
-
-
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteAnimalById(@PathVariable Long id) {
+        animalRepository.deleteById(id);
+    }
+
+
 }
