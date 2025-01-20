@@ -14,9 +14,13 @@ public class Family {
     @Column(name = "familyName", nullable = false)
     private String familyName;
 
+    @Column(name = "animal_id", nullable = false)
+    private int animal_id;
+
     public Family(int id, String familyName) {
         this.id = id;
         this.familyName = familyName;
+        this.animal_id = animal_id;
     }
 
     public int getId() {
@@ -33,6 +37,14 @@ public class Family {
 
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
+    }
+
+    public int getAnimal_id() {
+        return animal_id;
+    }
+
+    public void setAnimal_id(int animal_id) {
+        this.animal_id = animal_id;
     }
 
     public Family () {

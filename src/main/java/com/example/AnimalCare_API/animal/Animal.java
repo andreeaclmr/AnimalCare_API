@@ -6,11 +6,11 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "animals")
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-
     private int id;
 
     @Column(name = "name", nullable = false)
@@ -19,30 +19,28 @@ public class Animal {
     @Column(name = "gender", nullable = false)
     private String gender;
 
-    @Column(name = "country", nullable = false)
+    @Column(name = "country_of_origin", nullable = false)
     private String countryOfOrigin;
 
     @ManyToOne
-    @JoinColumn(name = "family")
-    private Family family;
+    @JoinColumn(name = "type_id", nullable = false)
+    private Type type;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date_of_entry", nullable = false)
     private LocalDate dateOfEntry;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image_url")
     private String imageUrl;
 
 
-
-    public Animal(int id, String name, Family family, String gender, String countryOfOrigin, LocalDate dateOfEntry, String imageUrl) {
+    public Animal(int id, String name, String gender, String countryOfOrigin, Type type, LocalDate dateOfEntry, String imageUrl) {
         this.id = id;
         this.name = name;
-        this.family = family;
         this.gender = gender;
         this.countryOfOrigin = countryOfOrigin;
+        this.type = type;
         this.dateOfEntry = dateOfEntry;
         this.imageUrl = imageUrl;
-
     }
 
     public int getId() {
@@ -61,7 +59,6 @@ public class Animal {
         this.name = name;
     }
 
-
     public String getGender() {
         return gender;
     }
@@ -78,6 +75,14 @@ public class Animal {
         this.countryOfOrigin = countryOfOrigin;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public LocalDate getDateOfEntry() {
         return dateOfEntry;
     }
@@ -92,14 +97,6 @@ public class Animal {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Family getFamily() {
-        return family;
-    }
-
-    public void setFamily(Family family) {
-        this.family = family;
     }
 
     public Animal() {
