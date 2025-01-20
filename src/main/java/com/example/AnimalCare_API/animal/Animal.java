@@ -1,6 +1,5 @@
 package com.example.AnimalCare_API.animal;
 
-import com.example.AnimalCare_API.family.Family;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -8,38 +7,48 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "animals")
 public class Animal {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+
     private int id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
+
     @Column(name = "gender", nullable = false)
     private String gender;
 
-    @Column(name = "country_of_origin", nullable = false)
-    private String countryOfOrigin;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id", nullable = false)
-    private Type type;
+    @Column(name = "country", nullable = false)
+    private String country;
 
-    @Column(name = "date_of_entry", nullable = false)
+
+    @Column(name = "date", nullable = false)
     private LocalDate dateOfEntry;
 
-    @Column(name = "image_url")
+
+    @Column(name = "type", nullable = false)
+    private String type;
+
+
+    @Column(name = "family", nullable = false)
+    private String family;
+
+
+    @Column(name = "image", nullable = false)
     private String imageUrl;
 
-
-    public Animal(int id, String name, String gender, String countryOfOrigin, Type type, LocalDate dateOfEntry, String imageUrl) {
+    public Animal(int id, String name, String gender, String country, LocalDate dateOfEntry, String type, String family, String imageUrl) {
         this.id = id;
         this.name = name;
         this.gender = gender;
-        this.countryOfOrigin = countryOfOrigin;
-        this.type = type;
+        this.country = country;
         this.dateOfEntry = dateOfEntry;
+        this.type = type;
+        this.family = family;
         this.imageUrl = imageUrl;
     }
 
@@ -67,20 +76,12 @@ public class Animal {
         this.gender = gender;
     }
 
-    public String getCountryOfOrigin() {
-        return countryOfOrigin;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountryOfOrigin(String countryOfOrigin) {
-        this.countryOfOrigin = countryOfOrigin;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public LocalDate getDateOfEntry() {
@@ -91,6 +92,22 @@ public class Animal {
         this.dateOfEntry = dateOfEntry;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFamily() {
+        return family;
+    }
+
+    public void setFamily(String family) {
+        this.family = family;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -99,7 +116,5 @@ public class Animal {
         this.imageUrl = imageUrl;
     }
 
-    public Animal() {
-
-    }
+    public Animal () {}
 }

@@ -1,26 +1,28 @@
 package com.example.AnimalCare_API.family;
 
+import com.example.AnimalCare_API.type.Type;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
+@Table(name = "families")
 public class Family {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-
     private int id;
 
-    @Column(name = "familyName", nullable = false)
+    @Column(name = "family_Name", nullable = false)
     private String familyName;
 
-    @Column(name = "animal_id", nullable = false)
-    private int animal_id;
 
-    public Family(int id, String familyName) {
+    public Family () {}
+
+    public Family(int id, String familyName, List<Type> types) {
         this.id = id;
         this.familyName = familyName;
-        this.animal_id = animal_id;
     }
 
     public int getId() {
@@ -37,17 +39,5 @@ public class Family {
 
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
-    }
-
-    public int getAnimal_id() {
-        return animal_id;
-    }
-
-    public void setAnimal_id(int animal_id) {
-        this.animal_id = animal_id;
-    }
-
-    public Family () {
-
     }
 }
