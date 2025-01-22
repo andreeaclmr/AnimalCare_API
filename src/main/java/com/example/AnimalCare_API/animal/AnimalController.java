@@ -12,13 +12,13 @@ import java.util.Optional;
 @RequestMapping ("/api/admin/animals")
 public class AnimalController {
 
-    private final AnimalRepository animalRepository;
+    private final AnimalService service;
 
-    public AnimalController(AnimalRepository animalRepository) {
-        this.animalRepository = animalRepository;
+    public AnimalController(AnimalService service) {
+        this.service = service;
     }
 
-    @GetMapping("/all")
+    /*@GetMapping("/all")
     public List<Animal> getAllAnimals() {
         return this.animalRepository.findAll();
     }
@@ -31,23 +31,31 @@ public class AnimalController {
             return new ResponseEntity<>(optionalAnimal.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<?> createAnimal (@RequestBody Animal animal) {
         Optional<Animal> optionalAnimal = animalRepository.findByName(animal.getName());
 
         if (optionalAnimal.isPresent()) return new ResponseEntity<>("The name already exists", HttpStatus.BAD_REQUEST);
 
-        Animal savedAnimal = animalRepository.save(animal);
+       // Animal savedAnimal = animalRepository.save(animal);
         return new ResponseEntity<>(savedAnimal, HttpStatus.CREATED);
+    }*/
+
+    @PostMapping
+    public String createAnimal (@RequestBody AnimalRequestDTO animalRequestDTO) {
+        // System.out.println("<------ " + animalRequestDTO.gender());
+        service.store(animalRequestDTO);
+
+        return "Yupi";
     }
 
-
+/*
     @DeleteMapping("/{id}")
     public void deleteAnimalById(@PathVariable Long id) {
         animalRepository.deleteById(id);
-    }
+    } */
 
 
 }

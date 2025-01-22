@@ -1,6 +1,9 @@
 package com.example.AnimalCare_API.animal;
 
+import com.example.AnimalCare_API.family.Family;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -12,7 +15,7 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
 
-    private int id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -33,15 +36,15 @@ public class Animal {
     @Column(name = "type", nullable = false)
     private String type;
 
-
-    @Column(name = "family", nullable = false)
-    private String family;
+    @ManyToOne
+    @JoinColumn(name = "family_id", nullable = false)
+    private Family family;
 
 
     @Column(name = "image", nullable = false)
     private String imageUrl;
 
-    public Animal(int id, String name, String gender, String country, LocalDate dateOfEntry, String type, String family, String imageUrl) {
+    public Animal(long id, String name, String gender, String country, LocalDate dateOfEntry, String type, Family family, String imageUrl) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -52,11 +55,11 @@ public class Animal {
         this.imageUrl = imageUrl;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -100,11 +103,11 @@ public class Animal {
         this.type = type;
     }
 
-    public String getFamily() {
+    public Family getFamily() {
         return family;
     }
 
-    public void setFamily(String family) {
+    public void setFamily(Family family) {
         this.family = family;
     }
 

@@ -1,8 +1,12 @@
 package com.example.AnimalCare_API.family;
 
+import com.example.AnimalCare_API.animal.Animal;
 import com.example.AnimalCare_API.type.Type;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,32 +16,32 @@ public class Family {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Long id;
 
-    @Column(name = "family_Name", nullable = false)
+    @Column(name = "family_name", nullable = false)
     private String familyName;
+
+
+    @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Animal> animal = new ArrayList<>();
 
 
     public Family () {}
 
-    public Family(int id, String familyName, List<Type> types) {
+    public Family(long id, String familyName, List<Type> types) {
         this.id = id;
         this.familyName = familyName;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFamilyName() {
         return familyName;
     }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public List<Animal> getAnimal() {
+        return animal;
     }
 }

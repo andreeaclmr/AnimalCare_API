@@ -1,0 +1,1 @@
+INSERT INTO families (id, family_name) VALUES (default, 'Félidos');
