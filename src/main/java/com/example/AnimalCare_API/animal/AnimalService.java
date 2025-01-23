@@ -20,6 +20,11 @@ public class AnimalService {
         Animal newAnimal =  new Animal();
         newAnimal.setName(animalRequestDTO.name());
         newAnimal.setGender(animalRequestDTO.gender());
+        newAnimal.setCountry(animalRequestDTO.country());
+        newAnimal.setType(animalRequestDTO.type());
+        newAnimal.setImageUrl(animalRequestDTO.imageUrl());
+
+
 
         // recuperamos la familia
         Family family = familyRepository.findById(animalRequestDTO.family()).orElseThrow();

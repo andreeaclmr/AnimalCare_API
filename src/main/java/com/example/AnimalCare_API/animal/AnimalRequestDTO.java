@@ -1,5 +1,14 @@
 package com.example.AnimalCare_API.animal;
 
 
-public record AnimalRequestDTO(String name, Long family, String gender) {
-}
+import java.time.LocalDate;
+
+public record AnimalRequestDTO(
+        String name,
+        Long family,
+        String gender,
+        String country,
+        String type,
+        String imageUrl
+
+) {}

@@ -1,7 +1,6 @@
 package com.example.AnimalCare_API.family;
 
 import com.example.AnimalCare_API.animal.Animal;
-import com.example.AnimalCare_API.type.Type;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +27,7 @@ public class Family {
 
     public Family () {}
 
-    public Family(long id, String familyName, List<Type> types) {
+    public Family(long id, String familyName) {
         this.id = id;
         this.familyName = familyName;
     }

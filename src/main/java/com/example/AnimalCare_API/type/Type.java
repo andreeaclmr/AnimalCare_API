@@ -1,3 +1,4 @@
+/*
 package com.example.AnimalCare_API.type;
 
 import com.example.AnimalCare_API.animal.Animal;
@@ -43,3 +44,4 @@ public class Type {
         return family;
     }
 }
+*/

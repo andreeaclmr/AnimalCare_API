@@ -45,7 +45,11 @@ public class AnimalController {
 
     @PostMapping
     public String createAnimal (@RequestBody AnimalRequestDTO animalRequestDTO) {
-        // System.out.println("<------ " + animalRequestDTO.gender());
+        /*System.out.println("<------ " + animalRequestDTO.gender());
+        System.out.println("<------ " + animalRequestDTO.country());
+        System.out.println("<------ " + animalRequestDTO.type());
+        System.out.println("<------ " + animalRequestDTO.family());
+        System.out.println("<------ " + animalRequestDTO.imageUrl());*/
         service.store(animalRequestDTO);
 
         return "Yupi";
