@@ -53,6 +53,22 @@ public class AnimalController {
         }
     }
 
+    // Get animals by country without pagination
+    @GetMapping("/country")
+    public ResponseEntity<List<Animal>> getAnimalsByCountry(@RequestParam String country) {
+        List<Animal> animals = animalRepository.findByCountry(country);
+        return ResponseEntity.ok(animals);
+    }
+
+    // Get animals by family and type
+    @GetMapping("/family-type")
+    public ResponseEntity<List<Animal>> getAnimalsByFamilyAndType(
+            @RequestParam Long familyId,
+            @RequestParam String type) {
+        List<Animal> animals = animalRepository.findByFamily_IdAndType(familyId, type);
+        return ResponseEntity.ok(animals);
+    }
+
 
     @PostMapping("/post")
     public ResponseEntity<String> createAnimal(@RequestBody AnimalRequestDTO animalRequestDTO) {
