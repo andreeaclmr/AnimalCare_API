@@ -1,3 +1,4 @@
+
 package com.example.AnimalCare_API.animal;
 
 import com.example.AnimalCare_API.family.Family;
@@ -15,19 +16,20 @@ public class AnimalService {
         this.familyRepository = familyRepository;
     }
 
-    public void store(AnimalRequestDTO animalRequestDTO) {
+    public void store(AnimalRequestDTO animalResponseDTO) {
         // crear animal
         Animal newAnimal =  new Animal();
-        newAnimal.setName(animalRequestDTO.name());
-        newAnimal.setGender(animalRequestDTO.gender());
-        newAnimal.setCountry(animalRequestDTO.country());
-        newAnimal.setType(animalRequestDTO.type());
-        newAnimal.setImageUrl(animalRequestDTO.imageUrl());
-
+        newAnimal.setName(animalResponseDTO.name());
+        newAnimal.setGender(animalResponseDTO.gender());
+        newAnimal.setCountry(animalResponseDTO.country());
+        newAnimal.setType(animalResponseDTO.type());
+        newAnimal.setImageUrl(animalResponseDTO.imageUrl());
+        newAnimal.setDateOfEntry(animalResponseDTO.dateOfEntry());
 
 
         // recuperamos la familia
-        Family family = familyRepository.findById(animalRequestDTO.family()).orElseThrow();
+        Family family = familyRepository.findById(animalResponseDTO.family())
+                .orElseThrow(() -> new IllegalArgumentException("Family with ID " + animalResponseDTO.family() + " not found."));
         // asignamos la familia
         newAnimal.setFamily(family);
 
