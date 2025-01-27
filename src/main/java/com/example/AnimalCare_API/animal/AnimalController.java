@@ -1,5 +1,6 @@
 package com.example.AnimalCare_API.animal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,21 @@ public class AnimalController {
             this.animalService = animalService;
         }
 
+    // Get all animals with pagination (max 20 animals per page)
     @GetMapping
-    public ResponseEntity<List<Animal>> getAllAnimals() {
-        List<Animal> animals = animalRepository.findAll();
+    public ResponseEntity<List<Animal>> getAllAnimals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        List<Animal> animals = animalRepository.findAll(PageRequest.of(page, size)).getContent();
         return ResponseEntity.ok(animals);
     }
+
+    @GetMapping("/get/id/{id}")
+    public ResponseEntity<Animal> getAnimalById(@PathVariable Long id) {
+        Optional<Animal> animal = animalRepository.findById(id);
+        return animal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
 
     @PostMapping("/post")
     public ResponseEntity<String> createAnimal(@RequestBody AnimalRequestDTO animalRequestDTO) {
@@ -36,11 +47,6 @@ public class AnimalController {
         }
     }
 
-    @GetMapping("/get/id/{id}")
-    public ResponseEntity<Animal> getAnimalById(@PathVariable Long id) {
-        Optional<Animal> animal = animalRepository.findById(id);
-        return animal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
 
     @DeleteMapping("/del/animal/{id}")
     public ResponseEntity<String> deleteAnimal(@PathVariable long id) {
