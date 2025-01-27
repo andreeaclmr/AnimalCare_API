@@ -1,5 +1,6 @@
 package com.example.AnimalCare_API.animal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +31,26 @@ public class AnimalController {
         return ResponseEntity.ok(animals);
     }
 
-    @GetMapping("/get/id/{id}")
-    public ResponseEntity<Animal> getAnimalById(@PathVariable Long id) {
-        Optional<Animal> animal = animalRepository.findById(id);
-        return animal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    // Get animals by family with pagination (max 10 animals per page)
+    @GetMapping("/family")
+    public ResponseEntity<String> getAnimalsByFamily(
+            @RequestParam Long familyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            // Validate familyId
+            if (familyId == null) {
+                return ResponseEntity.badRequest().body(List.of().toString());
+            }
+
+            Page<Animal> animalsPage = (Page<Animal>) animalRepository.findByFamily_Id(familyId, PageRequest.of(page, size));
+            List<Animal> animals = animalsPage.getContent();
+            return ResponseEntity.ok(animals.toString());
+        } catch (Exception e) {
+            // Handle unexpected errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(List.of().toString());
+        }
     }
 
 
