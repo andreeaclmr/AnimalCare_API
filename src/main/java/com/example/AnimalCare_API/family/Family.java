@@ -20,27 +20,34 @@ public class Family {
     @Column(name = "family_name", nullable = false)
     private String familyName;
 
+    @OneToMany(mappedBy = "family")
+    private List<Animal> animals;
 
-    @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Animal> animal = new ArrayList<>();
-
-
-    public Family () {}
-
-    public Family(long id, String familyName) {
-        this.id = id;
-        this.familyName = familyName;
-    }
+  //  @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
+    // private final List<Animal> animal = new ArrayList<>();
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFamilyName() {
         return familyName;
     }
 
-    public List<Animal> getAnimal() {
-        return animal;
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
     }
+
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(List<Animal> animals) {
+        this.animals = animals;
+    }
+
 }

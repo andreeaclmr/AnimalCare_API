@@ -1,10 +1,15 @@
 package com.example.AnimalCare_API.animal;
+import com.example.AnimalCare_API.family.Family;
+import com.example.AnimalCare_API.family.FamilyRepository;
+import com.example.AnimalCare_API.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,13 +18,22 @@ import java.util.Optional;
 @RequestMapping ("/api/admin/animals")
 public class AnimalController {
 
-        private final AnimalRepository animalRepository;
-        private final AnimalService animalService;
+    private static final Logger logger = LoggerFactory.getLogger(AnimalController.class);
+    private final AnimalRepository animalRepository;
+    private final AnimalService animalService;
+    private final ImageService imageService;
+    private final FamilyRepository familyRepository;
 
-        @Autowired
-        public AnimalController(AnimalRepository animalRepository, AnimalService animalService) {
+
+    @Autowired
+        public AnimalController(AnimalRepository animalRepository,
+                                AnimalService animalService,
+                                ImageService imageService,
+                                FamilyRepository familyRepository) {
             this.animalRepository = animalRepository;
             this.animalService = animalService;
+            this.imageService = imageService;
+            this.familyRepository = familyRepository;
         }
 
     // Get all animals with pagination (max 20 animals per page)
@@ -38,7 +52,6 @@ public class AnimalController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            // Validate familyId
             if (familyId == null) {
                 return ResponseEntity.badRequest().body(List.of().toString());
             }
@@ -47,7 +60,6 @@ public class AnimalController {
             List<Animal> animals = animalsPage.getContent();
             return ResponseEntity.ok(animals.toString());
         } catch (Exception e) {
-            // Handle unexpected errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(List.of().toString());
         }
@@ -70,18 +82,45 @@ public class AnimalController {
     }
 
 
-    @PostMapping("/post")
-    public ResponseEntity<String> createAnimal(@RequestBody AnimalRequestDTO animalRequestDTO) {
+
+   /* @PostMapping(value = "/post", consumes = "multipart/form-data")
+    public ResponseEntity<Animal> createAnimal(@ModelAttribute AnimalRequestDTO animalRequestDTO) {
         try {
-            animalService.store(animalRequestDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Animal created successfully");
+            String imageUrl = imageService.saveImage(animalRequestDTO.image());
+            Animal animal = new Animal();
+            animal.setName(animalRequestDTO.name());
+            animal.setGender(animalRequestDTO.gender());
+            animal.setCountry(animalRequestDTO.country());
+            animal.setDateOfEntry(animalRequestDTO.dateOfEntry());
+            animal.setType(animalRequestDTO.type());
+            animal.setImageUrl(imageUrl);
+
+            Family family = familyRepository.findById(animalRequestDTO.family())
+                    .orElseThrow(() -> new IllegalArgumentException("Family not found"));
+            animal.setFamily(family);
+
+            Animal savedAnimal = animalRepository.save(animal);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedAnimal);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create animal: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+*/
+
+    @PostMapping(value = "/post", consumes = "multipart/form-data")
+    public ResponseEntity<Animal> createAnimal(@ModelAttribute AnimalRequestDTO animalRequestDTO) {
+        try {
+            logger.info("Received POST request for animal: {}", animalRequestDTO);
+            animalService.store(animalRequestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            logger.error("Failed to create animal: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
 
-    @DeleteMapping("/del/animal/{id}")
+            @DeleteMapping("/del/animal/{id}")
     public ResponseEntity<String> deleteAnimal(@PathVariable long id) {
         animalRepository.deleteById(id);
         return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);

@@ -2,6 +2,7 @@ package com.example.AnimalCare_API.animal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -25,7 +26,6 @@ public record AnimalRequestDTO(
         @NotBlank(message = "Type field cannot be empty")
         String type,
 
-        @NotBlank(message = "Image URL cannot be empty")
-        String imageUrl
+        MultipartFile image
 
-) {}
+){}
