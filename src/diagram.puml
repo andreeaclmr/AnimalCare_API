@@ -1,0 +1,39 @@
+@startuml
+class Animal {
+  - Long id
+  - String name
+  - String type
+  - String gender
+  - String country
+  - Date dateOfEntry
+  - String imageUrl
+  + Getters/Setters
+}
+
+class Family {
+  - Long id
+  - String name
+  + Getters/Setters
+}
+
+class AnimalController {
+  + ResponseEntity<List<Animal>> getAllAnimals(int page, int size)
+  + ResponseEntity<Animal> getAnimalByName(String name)
+  + ResponseEntity<Void> addAnimal(AnimalRequestDTO request)
+}
+
+class AnimalService {
+  + List<Animal> getAllAnimals(int page, int size)
+  + Animal getAnimalByName(String name)
+  + void saveAnimal(Animal animal)
+}
+
+class AnimalRepository {
+  + Page<Animal> findByFamily_Id(Long familyId, Pageable pageable)
+  + Optional<Animal> findByName(String name)
+}
+
+AnimalController --> AnimalService
+AnimalService --> AnimalRepository
+Animal --> Family
+@enduml
