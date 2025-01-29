@@ -47,23 +47,24 @@ public class AnimalController {
 
     // Get animals by family with pagination (max 10 animals per page)
     @GetMapping("/family")
-    public ResponseEntity<String> getAnimalsByFamily(
+    public ResponseEntity<List<Animal>> getAnimalsByFamily(
             @RequestParam Long familyId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            if (familyId == null) {
-                return ResponseEntity.badRequest().body(List.of().toString());
-            }
+            logger.info("Fetching animals for family ID: {}", familyId);
 
-            Page<Animal> animalsPage = (Page<Animal>) animalRepository.findByFamily_Id(familyId, PageRequest.of(page, size));
+            Page<Animal> animalsPage = animalRepository.findByFamily_Id(familyId, PageRequest.of(page, size));
             List<Animal> animals = animalsPage.getContent();
-            return ResponseEntity.ok(animals.toString());
+
+            return ResponseEntity.ok(animals);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of().toString());
+            logger.error("Failed to fetch animals by family: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
 
     // Get animals by country without pagination
     @GetMapping("/country")
@@ -126,27 +127,43 @@ public class AnimalController {
         return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
     }
 
-    @PutMapping("/put/animal/{id}")
-    public ResponseEntity<Animal> updateAnimal(@PathVariable long id, @RequestBody Animal animal) {
+    @PutMapping(value = "/put/animal/{id}", consumes = "multipart/form-data")
+    public ResponseEntity<Animal> updateAnimal(@PathVariable long id, @ModelAttribute AnimalRequestDTO animalRequestDTO) {
         try {
-            Optional<Animal> existingAnimal = animalRepository.findById(id);
-            if (existingAnimal.isPresent()) {
-                Animal updatedAnimal = existingAnimal.get();
-                updatedAnimal.setName(animal.getName());
-                updatedAnimal.setGender(animal.getGender());
-                updatedAnimal.setCountry(animal.getCountry());
-                updatedAnimal.setDateOfEntry(animal.getDateOfEntry());
-                updatedAnimal.setType(animal.getType());
-                updatedAnimal.setFamily(animal.getFamily());
-                updatedAnimal.setImageUrl(animal.getImageUrl());
+            logger.info("Received PUT request to update animal with id: {}", id);
+            Optional<Animal> existingAnimalOpt = animalRepository.findById(id);
+
+            if (existingAnimalOpt.isPresent()) {
+                Animal updatedAnimal = existingAnimalOpt.get();
+
+                if (animalRequestDTO.name() != null) updatedAnimal.setName(animalRequestDTO.name());
+                if (animalRequestDTO.gender() != null) updatedAnimal.setGender(animalRequestDTO.gender());
+                if (animalRequestDTO.country() != null) updatedAnimal.setCountry(animalRequestDTO.country());
+                if (animalRequestDTO.dateOfEntry() != null) updatedAnimal.setDateOfEntry(animalRequestDTO.dateOfEntry());
+                if (animalRequestDTO.type() != null) updatedAnimal.setType(animalRequestDTO.type());
+
+                if (animalRequestDTO.family() != null) {
+                    Family family = familyRepository.findById(animalRequestDTO.family())
+                            .orElseThrow(() -> new IllegalArgumentException("Family not found"));
+                    updatedAnimal.setFamily(family);
+                }
+
+                if (animalRequestDTO.image() != null && !animalRequestDTO.image().isEmpty()) {
+                    String imageUrl = imageService.saveImage(animalRequestDTO.image());
+                    updatedAnimal.setImageUrl(imageUrl);
+                }
 
                 Animal savedAnimal = animalRepository.save(updatedAnimal);
+                logger.info("Successfully updated animal with id: {}", id);
                 return ResponseEntity.ok(savedAnimal);
             } else {
+                logger.warn("Animal with id {} not found", id);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
+            logger.error("Failed to update animal: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }

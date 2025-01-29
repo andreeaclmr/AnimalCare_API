@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface AnimalRepository extends JpaRepository <Animal, Long> {
     Optional<Animal> findByName(String name);
 
-    ContentHandler findByFamily_Id(Long familyId, PageRequest of);
     Page<Animal> findByFamily_Id(Long familyId, Pageable pageable);
     List<Animal> findByCountry(String country);
     List<Animal> findByFamily_IdAndType(Long familyId, String type);
