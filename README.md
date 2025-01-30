@@ -48,10 +48,10 @@ AnimalCare_API
 ---
 
 ## 📌 **Database Schema (ER Diagram)**
-![Kanban Screenshot](uploads/images/ER.png)
+![Kanban Screenshot](https://github.com/andreeaclmr/AnimalCare_API/blob/46962018f0ceb0099bca0c4b947d1550652f91ec/ER.png)
 
 ## 🖥️ **System Architecture (UML Diagram)**
-![Kanban Screenshot](uploads/images/UML.png)
+![Kanban Screenshot](https://github.com/andreeaclmr/AnimalCare_API/blob/main/UML.png)
 
 ## 🔧 Setup & Running Locally
 
@@ -100,7 +100,7 @@ Run unit tests:
 
 
 ## Kanban with Asana for Project Management
-![Kanban Screenshot](uploads/images/KanbanAsana.png)
+![Kanban Screenshot](https://github.com/andreeaclmr/AnimalCare_API/blob/main/KanbanAsana.png)
 
 ## GIT Branches
 #### -  main
